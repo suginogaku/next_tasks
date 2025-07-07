@@ -8,7 +8,7 @@ const NewTaskForm = () => {
   const [state, formAction] = useFormState(createTask, initialState);
 
   const SubmitButton = () => {
-    const { pending } = useFormStatus;
+    const { pending } = useFormStatus();
     return (
       <button
         type="submit"
