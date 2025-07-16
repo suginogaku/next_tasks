@@ -27,3 +27,23 @@ export const createTask = async (state: formState, formData: FormData) => {
 
   redirect("/")
 }
+
+export const updateTask = async (id: string, state: formState, formData: FormData) => {
+  const updateTask: Task = {
+    title: formData.get('title') as string,
+    description: formData.get('description') as string,
+    dueDate: formData.get('dueDate') as string,
+    isCompleted: Boolean(formData.get('isCompleted'))
+  }
+
+  // DBとの接続設定確立してないからエラーになるよ
+  try {
+    await connectToDatabase()
+    await TaskModel.updateOne({_id: id}, updateTask)
+  } catch (error) {
+    state.error = "タスクの更新に失敗しました"
+    return state;
+  }
+
+  redirect("/")
+}
