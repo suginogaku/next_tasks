@@ -1,3 +1,8 @@
+'use client'
+
+import { deleteTask, formState } from "@/actions/task";
+import { useEffect } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { FaTrashAlt } from "react-icons/fa";
 
 interface TaskDeleteButtonProps {
@@ -5,11 +10,30 @@ interface TaskDeleteButtonProps {
 }
 
 const TaskDeleteButton = ({ id }: TaskDeleteButtonProps) => {
-  return (
-    <form action="">
-      <button type="submit" className="hover:text-gray-700 text-lg cursor-pointer">
+  const deleteTaskWithId = deleteTask.bind(null, id);
+  const initialState: formState = {error: ""}
+  const [state, formAction] = useFormState(deleteTaskWithId, initialState)
+
+  useEffect(() => {
+    if (state && state.error !== "") {
+      alert(state.error)
+    }
+  }, [state])
+
+  const SubmitButton = () => {
+    const { pending } = useFormStatus();
+    return(
+      <button
+        type="submit"
+        disabled={pending}
+        className="hover:text-gray-700 text-lg cursor-pointer disabled:bg-gray-400">
         <FaTrashAlt />
       </button>
+    )
+  }
+  return (
+    <form action={formAction}>
+      <SubmitButton />
     </form>
   )
 }

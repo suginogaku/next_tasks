@@ -47,3 +47,15 @@ export const updateTask = async (id: string, state: formState, formData: FormDat
 
   redirect("/")
 }
+
+export const deleteTask = async (id: string, state: formState) => {
+  try {
+    await connectToDatabase()
+    await TaskModel.deleteOne({_id: id})
+  } catch (error) {
+    state.error = "タスクの削除に失敗しました"
+    return state;
+  }
+
+  redirect("/")
+}
